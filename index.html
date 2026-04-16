@@ -3,290 +3,191 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Azure Translator Studio</title>
+  <title>Vanta Translate Studio</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="bg-orb orb-one"></div>
-  <div class="bg-orb orb-two"></div>
-  <div class="bg-orb orb-three"></div>
+  <div class="ambient ambient-1"></div>
+  <div class="ambient ambient-2"></div>
+  <div class="ambient ambient-3"></div>
 
-  <div class="shell">
-    <aside class="sidebar glass">
+  <div class="app-shell">
+    <aside class="side-panel">
       <div class="brand">
-        <div class="brand-mark">A</div>
+        <div class="brand-mark">V</div>
         <div>
-          <h1>Azure Translator Studio</h1>
-          <p>Beautiful multilingual tools in one place</p>
+          <h1>Vanta Translate Studio</h1>
+          <p data-i18n="brandSub">Azure Translator dashboard</p>
         </div>
       </div>
 
-      <section class="panel">
-        <div class="panel-title">
-          <span>Connection</span>
-          <span class="pill">Saved locally</span>
+      <div class="card glass">
+        <div class="card-head">
+          <h2 data-i18n="settingsTitle">Dashboard settings</h2>
+          <span class="pill" data-i18n="localOnly">Local</span>
         </div>
 
-        <label class="field">
-          <span>Azure endpoint</span>
+        <label>
+          <span data-i18n="endpointLabel">Endpoint</span>
           <input id="endpoint" type="text" placeholder="https://api.cognitive.microsofttranslator.com" />
         </label>
 
-        <label class="field">
-          <span>Subscription key</span>
-          <input id="key" type="password" placeholder="Paste your key" />
+        <label>
+          <span data-i18n="keyLabel">Key</span>
+          <input id="apiKey" type="password" placeholder="Paste Azure Translator key" />
         </label>
 
-        <label class="field">
-          <span>Region (optional)</span>
-          <input id="region" type="text" placeholder="eastus / global / your region" />
+        <label>
+          <span data-i18n="regionLabel">Region</span>
+          <input id="region" type="text" placeholder="eastus / centralindia / etc." />
         </label>
 
-        <button id="saveConfig" class="btn primary">Save connection</button>
-        <button id="testConnection" class="btn secondary">Try detect sample</button>
+        <label>
+          <span data-i18n="uiLangLabel">Website language switcher</span>
+          <select id="uiLanguage"></select>
+        </label>
 
-        <div id="connectionStatus" class="status">Fill in your endpoint and key to begin.</div>
-      </section>
+        <button id="saveSettings" class="btn primary" data-i18n="saveBtn">Save dashboard</button>
+        <button id="loadLanguages" class="btn secondary" data-i18n="loadLanguagesBtn">Load Azure languages</button>
 
-      <section class="panel">
-        <div class="panel-title">
-          <span>Target languages</span>
-          <span class="pill" id="selectedCount">0 selected</span>
+        <div class="hint" data-i18n="settingsHint">
+          Your key stays in the browser in this prototype. For production, move calls behind a server.
         </div>
+      </div>
 
-        <div id="languageChips" class="chips"></div>
-
-        <div class="chip-actions">
-          <button id="selectAll" class="mini-btn">Select all</button>
-          <button id="clearAll" class="mini-btn">Clear</button>
-        </div>
-      </section>
-
-      <section class="panel compact">
-        <div class="panel-title">
-          <span>Tip</span>
-        </div>
-        <p class="tip-text">
-          For best dictionary results, use English as the source word. The translator can still auto-detect text in the other tools.
-        </p>
-      </section>
+      <div class="card glass mini">
+        <h3 data-i18n="statusTitle">Status</h3>
+        <div id="statusText" class="status">Ready</div>
+      </div>
     </aside>
 
-    <main class="content">
-      <header class="hero glass">
+    <main class="main-panel">
+      <section class="hero glass">
         <div>
-          <p class="eyebrow">Azure AI Translator front end</p>
-          <h2>Translate text, chat, phrases, and page copy with one elegant dashboard.</h2>
-          <p class="hero-copy">
-            Enter your Azure key and endpoint once, choose several target languages, and use every tool without switching pages.
+          <span class="eyebrow" data-i18n="eyebrow">Multilingual language lab</span>
+          <h2 data-i18n="heroTitle">Translate text, learn words, and switch the site language.</h2>
+          <p data-i18n="heroDesc">
+            Built for Azure Translator with a clean dashboard, multi-target translation, dictionary meaning help, and resume/document sentence translation.
           </p>
         </div>
-
-        <div class="hero-metrics">
-          <div class="metric-card">
-            <span>Tools</span>
-            <strong>6</strong>
-          </div>
-          <div class="metric-card">
-            <span>Modes</span>
-            <strong>Multi-target</strong>
-          </div>
-          <div class="metric-card">
-            <span>Storage</span>
-            <strong>Local only</strong>
-          </div>
-        </div>
-      </header>
-
-      <section class="grid two-up">
-        <article class="card glass">
-          <div class="card-head">
-            <div>
-              <p class="eyebrow">Text translator</p>
-              <h3>Translate any text instantly</h3>
-            </div>
-            <button class="ghost-btn" data-fill-sample="translateInput">Use sample</button>
-          </div>
-
-          <div class="grid form-grid">
-            <label class="field span-2">
-              <span>Source language</span>
-              <select id="translateFrom">
-                <option value="">Auto-detect</option>
-                <option value="en">English</option>
-                <option value="hi">Hindi</option>
-                <option value="es">Spanish</option>
-                <option value="fr">French</option>
-                <option value="de">German</option>
-                <option value="ja">Japanese</option>
-                <option value="ko">Korean</option>
-                <option value="ar">Arabic</option>
-                <option value="pt">Portuguese</option>
-                <option value="ru">Russian</option>
-              </select>
-            </label>
-
-            <label class="field span-2">
-              <span>Text</span>
-              <textarea id="translateInput" rows="6" placeholder="Type or paste text to translate..."></textarea>
-            </label>
-          </div>
-
-          <div class="actions">
-            <button id="translateBtn" class="btn primary">Translate text</button>
-            <button id="swapTranslate" class="btn secondary">Detect source first</button>
-          </div>
-
-          <div id="translateMeta" class="meta-line"></div>
-          <div id="translateOutput" class="output-box"></div>
-        </article>
-
-        <article class="card glass">
-          <div class="card-head">
-            <div>
-              <p class="eyebrow">Multilanguage chat helper</p>
-              <h3>Translate messages like a chat</h3>
-            </div>
-            <button class="ghost-btn" id="clearChat">Clear chat</button>
-          </div>
-
-          <div class="chat-window" id="chatWindow"></div>
-
-          <div class="chat-compose">
-            <textarea id="chatInput" rows="3" placeholder="Write a message here..."></textarea>
-            <div class="actions">
-              <button id="sendChat" class="btn primary">Add message</button>
-              <button id="translateChat" class="btn secondary">Translate latest</button>
-            </div>
-          </div>
-        </article>
-      </section>
-
-      <section class="grid three-up">
-        <article class="card glass">
-          <div class="card-head">
-            <div>
-              <p class="eyebrow">Website language switcher</p>
-              <h3>Translate your site copy</h3>
-            </div>
-          </div>
-
-          <label class="field">
-            <span>Website text / UI copy</span>
-            <textarea id="siteCopy" rows="8" placeholder="Paste hero text, headings, buttons, or short page copy..."></textarea>
-          </label>
-
-          <div class="actions">
-            <button id="translateSite" class="btn primary">Translate site copy</button>
-            <button class="btn secondary" data-fill-sample="siteCopy">Use sample</button>
-          </div>
-
-          <div id="siteOutput" class="output-box"></div>
-        </article>
-
-        <article class="card glass">
-          <div class="card-head">
-            <div>
-              <p class="eyebrow">Word meaning helper</p>
-              <h3>Look up words with examples</h3>
-            </div>
-          </div>
-
-          <div class="grid form-grid">
-            <label class="field">
-              <span>Word</span>
-              <input id="wordInput" type="text" placeholder="sunshine" />
-            </label>
-            <label class="field">
-              <span>From</span>
-              <select id="wordFrom">
-                <option value="en">English</option>
-                <option value="hi">Hindi</option>
-                <option value="es">Spanish</option>
-                <option value="fr">French</option>
-                <option value="de">German</option>
-                <option value="ja">Japanese</option>
-              </select>
-            </label>
-            <label class="field">
-              <span>To</span>
-              <select id="wordTo">
-                <option value="hi">Hindi</option>
-                <option value="es">Spanish</option>
-                <option value="fr">French</option>
-                <option value="de">German</option>
-                <option value="ja">Japanese</option>
-                <option value="en">English</option>
-              </select>
-            </label>
-          </div>
-
-          <div class="actions">
-            <button id="lookupWord" class="btn primary">Find meaning</button>
-            <button class="btn secondary" data-fill-sample="wordInput">Use sample</button>
-          </div>
-
-          <div id="wordOutput" class="output-box"></div>
-        </article>
-
-        <article class="card glass">
-          <div class="card-head">
-            <div>
-              <p class="eyebrow">Travel phrase tool</p>
-              <h3>Quick useful phrases</h3>
-            </div>
-          </div>
-
-          <div class="phrase-grid">
-            <button class="phrase-btn" data-phrase="Where is the nearest metro station?">Metro station</button>
-            <button class="phrase-btn" data-phrase="How much does this cost?">Price</button>
-            <button class="phrase-btn" data-phrase="I need help, please.">Help</button>
-            <button class="phrase-btn" data-phrase="Where is the bathroom?">Bathroom</button>
-            <button class="phrase-btn" data-phrase="Do you speak English?">Language</button>
-            <button class="phrase-btn" data-phrase="Can you call a taxi for me?">Taxi</button>
-          </div>
-
-          <label class="field">
-            <span>Custom phrase</span>
-            <textarea id="phraseInput" rows="4" placeholder="Type a travel phrase or select a button above..."></textarea>
-          </label>
-
-          <div class="actions">
-            <button id="translatePhrase" class="btn primary">Translate phrase</button>
-          </div>
-
-          <div id="phraseOutput" class="output-box"></div>
-        </article>
-      </section>
-
-      <section class="card glass">
-        <div class="card-head">
+        <div class="hero-badge">
+          <div class="badge-circle">AI</div>
           <div>
-            <p class="eyebrow">Document / resume sentence translator</p>
-            <h3>Translate line by line for documents and resumes</h3>
+            <strong data-i18n="badgeTitle">Smart language workspace</strong>
+            <p data-i18n="badgeDesc">One page, three translator modes</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="tabs">
+        <button class="tab active" data-tab="textTab" data-i18n="tabText">Text translator</button>
+        <button class="tab" data-tab="meaningTab" data-i18n="tabMeaning">Word meaning helper</button>
+        <button class="tab" data-tab="docTab" data-i18n="tabDoc">Document / resume translator</button>
+      </section>
+
+      <section id="textTab" class="panel active glass">
+        <div class="panel-grid">
+          <div class="field-block">
+            <label data-i18n="sourceLabel">Source language</label>
+            <select id="sourceLang"></select>
+          </div>
+
+          <div class="swap-wrap">
+            <button id="swapLangs" class="swap-btn" title="Swap languages">⇄</button>
+          </div>
+
+          <div class="field-block">
+            <label data-i18n="targetLabel">Target language(s)</label>
+            <select id="targetLang" multiple size="8"></select>
+            <div class="small-note" data-i18n="multiTargetHint">Hold Ctrl / Cmd to select multiple languages.</div>
           </div>
         </div>
 
-        <label class="field">
-          <span>Sentence list</span>
-          <textarea id="documentInput" rows="8" placeholder="Paste one sentence per line. Great for resumes, cover letters, or short document sections."></textarea>
+        <label class="text-area-block">
+          <span data-i18n="textInputLabel">Text to translate</span>
+          <textarea id="sourceText" rows="9" placeholder="Type or paste text here..."></textarea>
         </label>
 
-        <div class="actions">
-          <button id="translateDocument" class="btn primary">Translate document text</button>
-          <button class="btn secondary" data-fill-sample="documentInput">Use sample</button>
+        <div class="action-row">
+          <button id="translateBtn" class="btn primary" data-i18n="translateBtn">Translate</button>
+          <button id="clearTextBtn" class="btn ghost" data-i18n="clearBtn">Clear</button>
         </div>
 
-        <div id="documentOutput" class="output-box"></div>
+        <div id="textOutput" class="output-grid"></div>
       </section>
 
-      <footer class="footer">
-        <span>Built for Azure Translator REST APIs.</span>
-        <span>Keep your key private and save it only on your own device.</span>
-      </footer>
+      <section id="meaningTab" class="panel glass">
+        <div class="panel-grid single">
+          <div class="field-block">
+            <label data-i18n="meaningSourceLabel">Word source language</label>
+            <select id="meaningSource"></select>
+          </div>
+
+          <div class="field-block">
+            <label data-i18n="meaningTargetLabel">Word target language</label>
+            <select id="meaningTarget"></select>
+          </div>
+        </div>
+
+        <label class="text-area-block">
+          <span data-i18n="wordLabel">Word or short phrase</span>
+          <input id="lookupWord" type="text" placeholder="sunlight, future, learning..." />
+        </label>
+
+        <div class="action-row">
+          <button id="lookupBtn" class="btn primary" data-i18n="lookupBtn">Find meaning</button>
+          <button id="meaningClearBtn" class="btn ghost" data-i18n="clearBtn">Clear</button>
+        </div>
+
+        <div id="meaningOutput" class="meaning-output"></div>
+      </section>
+
+      <section id="docTab" class="panel glass">
+        <div class="doc-grid">
+          <div class="doc-card">
+            <h3 data-i18n="docTitle">Resume / document text translator</h3>
+            <p class="muted" data-i18n="docHint">
+              Paste the text from a resume, SOP, essay, or document, or upload a plain-text file.
+            </p>
+
+            <div class="upload-box">
+              <input id="docFile" type="file" accept=".txt,.md,.csv,.json,.html,.htm,.rtf,text/plain,text/markdown,text/html,application/json" />
+            </div>
+
+            <label class="text-area-block">
+              <span data-i18n="docInputLabel">Document text</span>
+              <textarea id="docText" rows="10" placeholder="Paste resume or document content here..."></textarea>
+            </label>
+
+            <div class="panel-grid single doc-lang-grid">
+              <div class="field-block">
+                <label data-i18n="docSourceLabel">Document source language</label>
+                <select id="docSource"></select>
+              </div>
+              <div class="field-block">
+                <label data-i18n="docTargetLabel">Document target language</label>
+                <select id="docTarget"></select>
+              </div>
+            </div>
+
+            <div class="action-row">
+              <button id="docTranslateBtn" class="btn primary" data-i18n="translateBtn">Translate</button>
+              <button id="docClearBtn" class="btn ghost" data-i18n="clearBtn">Clear</button>
+            </div>
+          </div>
+
+          <div class="doc-card">
+            <h3 data-i18n="docResultTitle">Translated output</h3>
+            <div id="docOutput" class="doc-output empty" data-i18n="docEmpty">
+              Your translated paragraphs will appear here.
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   </div>
 
+  <div id="toast" class="toast">Saved</div>
   <script src="script.js"></script>
 </body>
 </html>
